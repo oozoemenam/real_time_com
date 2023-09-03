@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>WebRTC Application</title>
+</head>
+<body>
+    <h1>WebRTC Application</h1>
+    <button type="button" onclick='createOffer()'>Create Offer</button>
+    <input id="input" type="text" placeholder="Message" />
+    <button type="button" onclick='sendMessage()'>SEND</button>
+    <video id="video" autoplay></video>
+    <div id="messages"></div>
+
+    <script src="/client.js"></script>
+</body>
+</html>
