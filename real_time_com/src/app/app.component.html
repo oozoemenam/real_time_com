@@ -1,0 +1,13 @@
+<video #localVideo controls autoplay muted></video>
+<video #remoteVideo controls autoplay></video>
+<button (click)="call()">Call</button>
+
+<input
+  type="text"
+  placeholder="Message"
+  (keydown.enter)="sendText(text.value)"
+  #text
+/>
+<div class="texts">
+  <p *ngFor="let text of webSocketService.texts">{{ text }}</p>
+</div>
