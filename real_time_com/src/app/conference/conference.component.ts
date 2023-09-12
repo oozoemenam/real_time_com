@@ -78,7 +78,7 @@ export class ConferenceComponent implements OnInit, OnDestroy {
         }
       };
       pc.ontrack = (e) => {
-        console.log('ontrackkkkkkkkkkkkkkkkkkk', e);
+        console.log('ontrack', e);
 
         // const remoteStream = new MediaStream();
 
@@ -208,6 +208,10 @@ export class ConferenceComponent implements OnInit, OnDestroy {
         }
       });
     });
+  }
+
+  disconnect() {
+    this.stompClient.disconnect();
   }
 
   // switchVideo(index: number) {

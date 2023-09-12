@@ -17,6 +17,7 @@ public class SessionEventListener {
   @EventListener
   public void handleSessionConnect(SessionConnectEvent event) {
     SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
+    headers.setLeaveMutable(true);
     System.out.println("Session connect event " + headers.getSessionId());
     sessionRepository.addSessionId(headers.getSessionId());
   }
