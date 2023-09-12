@@ -20,7 +20,7 @@ export class ConferenceComponent implements OnInit, OnDestroy {
   public streaming: boolean = false;
   private localStream!: MediaStream;
   private remoteStream!: MediaStream;
-  public remoteStreams: { id: SessionId; stream: MediaStream }[] = [];
+  public remoteStreams: { [key: string]: MediaStream } = {};
   // private selectedStreamIndex: number = -1;
   // private selectedStreamId: number = -1;
   private peerConnections: { [key: string]: RTCPeerConnection } = {};
@@ -79,14 +79,34 @@ export class ConferenceComponent implements OnInit, OnDestroy {
       };
       pc.ontrack = (e) => {
         console.log('ontrackkkkkkkkkkkkkkkkkkk', e);
-        const remoteStream = {
-          id: sessionId,
-          stream: e.streams[0],
-        };
+
+        // const remoteStream = new MediaStream();
+
+        // e.streams[0]
+        //   .getTracks()
+        //   .forEach((track) => remoteStream.addTrack(track));
+        // const remoteVideo = {
+        //   id: sessionId,
+        //   // stream: e.streams[0],
+        //   stream: remoteStream,
+        // };
+
         // this.selectedVideo = this.remoteStreams.find(s => s.id === this.selectedVideo.id) ? this.remoteStream
-        this.remoteStreams.push(remoteStream);
+        // this.remoteStreams.push(remoteVideo);
+        this.remoteStreams[sessionId] = e.streams[0];
+        // this.remoteStreams = {...this.remoteStreams,[sessionId]:e.streams[0]}
         console.log('remoteStreams', this.peerConnections, this.remoteStreams);
       };
+      if (this.localStream) {
+        this.localStream
+          .getTracks()
+          .forEach((track) => pc.addTrack(track, this.localStream));
+      }
+      console.log('this.localStream.getTracks()', this.localStream.getTracks());
+
+      // if (this.localStream) {
+      //   pc.addTrack(this.localStream.getTracks()[0], this.localStream);
+      // }
       // if (this.localStream) {
       //   this.localStream
       //     .getTracks()
@@ -120,13 +140,15 @@ export class ConferenceComponent implements OnInit, OnDestroy {
         console.log('SignalType.subscribe', this.peerConnections, signal);
         switch (signal.type) {
           case SignalType.Disconnect: {
-            this.remoteStreams = this.remoteStreams.filter(
-              (stream) => stream.id !== signal.fromId
-            );
-            this.selectedVideo =
-              this.selectedVideo?.id === signal.fromId
-                ? this.remoteStreams?.[0].stream
-                : null;
+            if (!signal.fromId) return;
+            // this.remoteStreams = this.remoteStreams.filter(
+            //   (stream) => stream.id !== signal.fromId
+            // );
+            // this.selectedVideo =
+            //   this.selectedVideo?.id === signal.fromId
+            //     ? this.remoteStreams?.[0].stream
+            //     : null;
+            delete this.remoteStreams[signal.fromId];
             break;
           }
           case SignalType.OfferRequest: {
@@ -148,9 +170,9 @@ export class ConferenceComponent implements OnInit, OnDestroy {
               signal.fromId,
               (pc: RTCPeerConnection) => {
                 if (!pc) return;
-                this.localStream
-                  .getTracks()
-                  .forEach((track) => pc.addTrack(track, this.localStream));
+                // this.localStream
+                //   .getTracks()
+                //   .forEach((track) => pc.addTrack(track, this.localStream));
                 pc.setRemoteDescription(
                   new RTCSessionDescription(signal.data)
                 ).then(() => {

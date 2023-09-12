@@ -1,7 +1,7 @@
 <!-- <video #remoteVideo controls autoplay></video> -->
 <app-video
-  *ngFor="let stream of remoteStreams"
-  [videoStream]="stream.stream"
+  *ngFor="let stream of remoteStreams | keyvalue"
+  [videoStream]="stream.value"
 ></app-video>
 <video #localVideo controls autoplay [muted]="true"></video>
 <button (click)="init()" [disabled]="false">Connect</button>
