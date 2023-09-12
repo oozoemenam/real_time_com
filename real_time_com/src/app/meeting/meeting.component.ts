@@ -31,7 +31,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
     const socket: any = new SockJS('http://localhost:8080/webrtc');
     this.stompClient = Stomp.over(socket);
     this.stompClient.connect({}, (frame: any) => {
-      this.stompClient.subscribe('/user/queue/message', (data: any) => {
+      this.stompClient.subscribe('/user/queue/signal', (data: any) => {
         console.log('subscribesubscribereceiveMessage', data);
         this.receiveMessage(data);
         // this.onMessageReceived(data);
@@ -77,7 +77,7 @@ export class MeetingComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(message: any) {
-    this.stompClient.send('/app/message', {}, JSON.stringify(message));
+    this.stompClient.send('/app/signal', {}, JSON.stringify(message));
   }
 
   receiveMessage(data: any) {

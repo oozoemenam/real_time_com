@@ -13,8 +13,9 @@ conn.onopen = function() {
 }
 
 conn.onmessage = function(message) {
-    console.log("On message", message);
+    
     const content = JSON.parse(message.data);
+console.log("On message", message.data, content);
     const { data, event } = content;
     switch (event) {
         case "offer":
